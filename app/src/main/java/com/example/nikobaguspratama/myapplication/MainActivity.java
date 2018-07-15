@@ -14,6 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -22,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     public static String EXTRA_ADDRESS = "device_address";
     private Set<BluetoothDevice> PairedDevices;
     private BluetoothAdapter myBluetooth = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
