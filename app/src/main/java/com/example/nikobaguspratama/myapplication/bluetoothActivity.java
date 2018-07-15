@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +40,10 @@ public class bluetoothActivity extends AppCompatActivity{
     private ProgressDialog progress;
     private DatabaseReference mDatabaseR;
     private boolean isBtConnected = false;
+    private boolean clickedButton = false;
     private String aString="0";
     private TextView data;
+    private Button upload;
     private int counter =0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +54,16 @@ public class bluetoothActivity extends AppCompatActivity{
         mDatabaseR = FirebaseDatabase.getInstance().getReference().child("datanya");
 
         data = findViewById(R.id.data);
+        upload = findViewById(R.id.upload);
         new connectBluetooth().execute();
 
+
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickedButton = true;
+            }
+        });
         Thread textSpeedThread = new Thread() {
             @Override
             public void run() {
@@ -74,7 +86,7 @@ public class bluetoothActivity extends AppCompatActivity{
                                         data.setText(String.valueOf(aString));
                                     }
                                     Log.d("dataGet",aString);
-                                    if(counter<20){
+                                    if(counter<20 && clickedButton==true){
                                         Log.d("masuk","masuk");
                                         counter++;
                                         final dataBluetooth Data = new dataBluetooth(aString);
@@ -89,8 +101,9 @@ public class bluetoothActivity extends AppCompatActivity{
 
                                             }
                                         });
-                                    }else if(counter==20){
-                                        counter++;
+                                    }else if(counter==20 && clickedButton==true ){
+                                        counter=0;
+                                        clickedButton=false;
                                         mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -115,6 +128,8 @@ public class bluetoothActivity extends AppCompatActivity{
         };
         textSpeedThread.start();
     }
+
+
 
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();//displays a message on screen
