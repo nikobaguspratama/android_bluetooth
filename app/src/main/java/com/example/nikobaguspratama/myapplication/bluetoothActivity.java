@@ -38,7 +38,7 @@ public class bluetoothActivity extends AppCompatActivity{
     private ProgressDialog progress;
     private DatabaseReference mDatabaseR;
     private boolean isBtConnected = false;
-    private String aString;
+    private String aString="0";
     private TextView data;
     private int counter =0;
     @Override
@@ -47,7 +47,7 @@ public class bluetoothActivity extends AppCompatActivity{
         setContentView(R.layout.bluetooth_activity);
         Intent newIntent = getIntent();
         address = newIntent.getStringExtra(MainActivity.EXTRA_ADDRESS);
-        mDatabaseR = FirebaseDatabase.getInstance().getReference().child("data-bluetooth");
+        mDatabaseR = FirebaseDatabase.getInstance().getReference().child("datanya");
 
         data = findViewById(R.id.data);
         new connectBluetooth().execute();
@@ -57,7 +57,7 @@ public class bluetoothActivity extends AppCompatActivity{
             public void run() {
                 try {
                     while (!isInterrupted()) {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run(){
@@ -66,9 +66,16 @@ public class bluetoothActivity extends AppCompatActivity{
                                     aReader = new InputStreamReader(mmInputStream);
                                     mBufferedReader = new BufferedReader(aReader);
                                     aString = mBufferedReader.readLine();
-                                    Log.d("data",aString);
-                                    data.setText(String.valueOf(aString));
+
+                                    if(aString==null){
+                                        aString="no data";
+                                        data.setText(aString);
+                                    }else{
+                                        data.setText(String.valueOf(aString));
+                                    }
+                                    Log.d("dataGet",aString);
                                     if(counter<20){
+                                        Log.d("masuk","masuk");
                                         counter++;
                                         final dataBluetooth Data = new dataBluetooth(aString);
                                         mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -82,7 +89,8 @@ public class bluetoothActivity extends AppCompatActivity{
 
                                             }
                                         });
-                                    }else{
+                                    }else if(counter==20){
+                                        counter++;
                                         mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
