@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 public class bluetoothActivity extends AppCompatActivity{
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    static final UUID hm10 = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
     private BluetoothSocket btSocket = null;
     private BluetoothAdapter mybluetooth = null;
     private InputStreamReader aReader = null;
@@ -33,13 +35,11 @@ public class bluetoothActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.bluetooth_activity);
         Intent newIntent = getIntent();
         address = newIntent.getStringExtra(MainActivity.EXTRA_ADDRESS);
         data = findViewById(R.id.data);
         new connectBluetooth().execute();
-
-
 
         Thread textSpeedThread = new Thread() {
             @Override
@@ -55,7 +55,11 @@ public class bluetoothActivity extends AppCompatActivity{
                                     aReader = new InputStreamReader(mmInputStream);
                                     mBufferedReader = new BufferedReader(aReader);
                                     aString = mBufferedReader.readLine();
-
+                                    Log.d("test",aString);
+                                    Log.d("test2",mBufferedReader.toString());
+                                    if(aString==null){
+                                        aString = "0";
+                                    }
                                     data.setText(String.valueOf(aString));
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -74,8 +78,17 @@ public class bluetoothActivity extends AppCompatActivity{
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();//displays a message on screen
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(progress!=null){
+            progress.dismiss();
+        }
+    }
+
     private class connectBluetooth extends AsyncTask<Void, Void, Void> {
         private boolean ConnectSuccess = true;
+
 
         @Override
         protected void onPreExecute() {
@@ -88,10 +101,14 @@ public class bluetoothActivity extends AppCompatActivity{
             try {
                 if (btSocket == null || isBtConnected)//when bluetooth device not connected
                 {
+                    Log.d("masuk","masuk");
                     mybluetooth = BluetoothAdapter.getDefaultAdapter();//getthe local device's bluetooth adapter
                     BluetoothDevice device = mybluetooth.getRemoteDevice(address);// connects to the device's address
-                    btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);// creates a connection
+                    //btSocket = device.createInsecureRfcommSocketToServiceRecord(myUUID);// creates a connection
+                    btSocket = device.createRfcommSocketToServiceRecord(myUUID);
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+                    Log.d("masuk",mybluetooth.toString()+","+device.toString()+","+btSocket.toString());
+
                     btSocket.connect();
                 }
             } catch (IOException e) {
@@ -103,6 +120,10 @@ public class bluetoothActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void result)// after executing doInBackground, it checks if everything went fine]
         {
+            if(progress!=null){
+                progress.dismiss();//closes progress bar
+            }
+
             super.onPostExecute(result);
             if (!ConnectSuccess) {
                 msg("Connection Failed! Try Again!");
@@ -111,8 +132,9 @@ public class bluetoothActivity extends AppCompatActivity{
                 msg("Connected");
                 isBtConnected = true;
             }
-            progress.dismiss();//closes progress bar
+
 
         }
+
     }
 }
