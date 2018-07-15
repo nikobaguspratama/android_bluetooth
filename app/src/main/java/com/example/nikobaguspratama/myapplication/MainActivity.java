@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             String address = info.substring(info.length() - 17);
             Intent i = new Intent(MainActivity.this, bluetoothActivity.class);
             i.putExtra(EXTRA_ADDRESS, address);
+            Log.d("test",address);
             startActivity(i);
         }
     };
