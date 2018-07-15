@@ -80,6 +80,18 @@ public class bluetoothActivity extends AppCompatActivity{
 
                                             }
                                         });
+                                    }else{
+                                        mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                mDatabaseR.push().setValue("///////////data End Here//////////");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
