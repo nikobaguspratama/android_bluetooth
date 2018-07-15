@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "219117988682",
+    "firebase_url": "https://androidbluetooth-1900f.firebaseio.com",
+    "project_id": "androidbluetooth-1900f",
+    "storage_bucket": "androidbluetooth-1900f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219117988682:android:fcd3a05033b75d58",
+        "android_client_info": {
+          "package_name": "com.example.nikobaguspratama.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219117988682-ffjckqimkgg6659tvqsrapqt0ruc5mlr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nikobaguspratama.myapplication",
+            "certificate_hash": "e1edad29eef73398fe43652d6601fd6823fa3af1"
+          }
+        },
+        {
+          "client_id": "219117988682-ovoabp2qo0dh7ti0pcpvn1v9a7rln4dt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ6MAmNUx7zDASnoBjkYqZqN6dTA38G3M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219117988682-ovoabp2qo0dh7ti0pcpvn1v9a7rln4dt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
