@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 public class bluetoothActivity extends AppCompatActivity{
@@ -51,7 +53,7 @@ public class bluetoothActivity extends AppCompatActivity{
         setContentView(R.layout.bluetooth_activity);
         Intent newIntent = getIntent();
         address = newIntent.getStringExtra(MainActivity.EXTRA_ADDRESS);
-        mDatabaseR = FirebaseDatabase.getInstance().getReference().child("datanya");
+        mDatabaseR = FirebaseDatabase.getInstance().getReference().child("Datanya");
 
         data = findViewById(R.id.data);
         upload = findViewById(R.id.upload);
@@ -86,9 +88,12 @@ public class bluetoothActivity extends AppCompatActivity{
                                         data.setText(String.valueOf(aString));
                                     }
                                     Log.d("dataGet",aString);
+                                    Log.d("dataGetButton",String.valueOf(clickedButton));
                                     if(counter<20 && clickedButton==true){
                                         Log.d("masuk","masuk");
                                         counter++;
+                                        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+                                        aString = aString+" ,"+date;
                                         final dataBluetooth Data = new dataBluetooth(aString);
                                         mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -107,7 +112,7 @@ public class bluetoothActivity extends AppCompatActivity{
                                         mDatabaseR.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                mDatabaseR.push().setValue("///////////data End Here//////////");
+                                                mDatabaseR.push().setValue("///////////Data End Here//////////");
                                             }
 
                                             @Override
